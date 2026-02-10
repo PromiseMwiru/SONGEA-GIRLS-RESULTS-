@@ -1,0 +1,475 @@
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PMC Midterm Results - Songea Girls</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .header {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #ffb6c1; /* light pink */
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .logo svg {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 5px;
+        }
+
+        .motto {
+            margin-top: 10px;
+            font-style: italic;
+            color: #333;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        th {
+            background: #ffb6c1; /* light pink */
+            color: white;
+        }
+
+        .signatures {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .sign {
+            text-align: center;
+            width: 45%;
+        }
+
+        .sign p {
+            margin: 5px 0;
+        }
+
+        .details {
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        .details p {
+            margin: 3px 0;
+        }
+
+        .topStudent {
+            background: #ffe6f0;
+            padding: 10px;
+            margin-top: 10px;
+            border-left: 5px solid #ffb6c1;
+        }
+
+        @media(max-width: 600px) {
+            .signatures {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .sign {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="logo">
+            <!-- School Drawing Icon -->
+            <svg viewBox="0 0 64 64">
+                <polygon points="32,6 6,24 58,24" fill="#fff" />
+                <rect x="18" y="24" width="28" height="22" fill="#fff" />
+                <rect x="26" y="30" width="12" height="16" fill="#ffb6c1" />
+                <rect x="12" y="46" width="40" height="10" fill="#fff" />
+                <line x1="22" y1="46" x2="22" y2="56" stroke="#ffb6c1" stroke-width="2"/>
+                <line x1="42" y1="46" x2="42" y2="56" stroke="#ffb6c1" stroke-width="2"/>
+            </svg>
+            <div>
+                SONGEA GIRLS
+                <div style="font-size: 12px; margin-top: 5px;">JIFUNZE JITUME JITEGEMEE</div>
+            </div>
+        </div>
+
+        <h2>PMC MIDTERM RESULTS SONGEA GIRLS</h2>
+        <div class="motto">“JIFUNZE JITUME JITEGEMEE”</div>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="box" id="loginBox">
+        <h3>Student Login</h3>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p id="error" style="color:red;"></p>
+    </div>
+
+    <!-- TEACHER APPROVAL -->
+    <div class="box" id="teacherBox" style="display:none;">
+        <h3>Teacher Approval</h3>
+        <p style="color: #555;">Enter subject teacher password to view results:</p>
+        <input type="password" id="teacherPassword" placeholder="Teacher Password">
+        <button onclick="approve()">Approve</button>
+        <p id="teacherError" style="color:red;"></p>
+    </div>
+
+    <!-- RESULT -->
+    <div class="box" id="resultBox" style="display:none;">
+        <h3 id="studentName"></h3>
+
+        <div class="details">
+            <p><strong>Student ID:</strong> <span id="studentId"></span></p>
+            <p><strong>Class:</strong> <span id="studentClass">Form 5</span></p>
+            <p><strong>Term:</strong> <span id="term"></span></p>
+            <p><strong>Year:</strong> <span id="year">2026</span></p>
+        </div>
+
+        <div class="topStudent" id="topStudent"></div>
+
+        <table id="resultTable">
+            <tr>
+                <th>Subject</th>
+                <th>Score</th>
+                <th>Grade</th>
+                <th>Rank</th>
+            </tr>
+        </table>
+
+        <p><strong>Total:</strong> <span id="total"></span></p>
+        <p><strong>Average:</strong> <span id="average"></span></p>
+        <p><strong>Percentage:</strong> <span id="percentage"></span>%</p>
+        <p><strong>Remark:</strong> <span id="remark"></span></p>
+        <p><strong>Position:</strong> <span id="position"></span></p>
+
+        <!-- Teacher comment -->
+        <p><strong>Teacher Comment:</strong> <span id="comment"></span></p>
+
+        <!-- Bar chart -->
+        <canvas id="barChart" width="400" height="200"></canvas>
+
+        <!-- Signatures -->
+        <div class="signatures">
+            <div class="sign">
+                <p>________________________</p>
+                <p><strong>Class Teacher</strong></p>
+                <p>Mshumbuzi</p>
+            </div>
+            <div class="sign">
+                <p>________________________</p>
+                <p><strong>Headmistress</strong></p>
+                <p>Esther Kulumura</p>
+            </div>
+        </div>
+
+        <br>
+        <button onclick="window.print()">Print Result</button>
+        <button onclick="logout()">Logout</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+/* STUDENT DATA */
+const students = [
+    {
+        id: "001",
+        username: "promise",
+        password: "111",
+        name: "Promise Isaac Mwiru",
+        class: "Form 5",
+        term: "Midterm",
+        year: "2026",
+        results: [
+            { subject: "Math", score: 45 },
+            { subject: "Physics", score: 40 },
+            { subject: "Computer Science", score: 70 }
+        ]
+    },
+    {
+        id: "002",
+        username: "faith",
+        password: "222",
+        name: "Faith Kasinja",
+        class: "Form 5",
+        term: "Midterm",
+        year: "2026",
+        results: [
+            { subject: "Math", score: 50 },
+            { subject: "Physics", score: 60 },
+            { subject: "Computer Science", score: 98 }
+        ]
+    },
+    {
+        id: "003",
+        username: "laura",
+        password: "333",
+        name: "Laura Alex Ngoi",
+        class: "Form 5",
+        term: "Midterm",
+        year: "2026",
+        results: [
+            { subject: "Math", score: 69 },
+            { subject: "Physics", score: 78 },
+            { subject: "Computer Science", score: 98 }
+        ]
+    },
+    {
+        id: "004",
+        username: "zuwena",
+        password: "444",
+        name: "Zuwena Ayubu Muheza",
+        class: "Form 5",
+        term: "Midterm",
+        year: "2026",
+        results: [
+            { subject: "Math", score: 56 },
+            { subject: "Physics", score: 79 },
+            { subject: "Computer Science", score: 99 }
+        ]
+    },
+    {
+        id: "005",
+        username: "catherine",
+        password: "555",
+        name: "Catherine Samwel",
+        class: "Form 5",
+        term: "Midterm",
+        year: "2026",
+        results: [
+            { subject: "Math", score: 56 },
+            { subject: "Physics", score: 69 },
+            { subject: "Computer Science", score: 100 }
+        ]
+    }
+];
+
+/* Teacher Password */
+const TEACHER_PASSWORD = "teacher123";
+
+/* Calculate grade based on score */
+function grade(score) {
+    if (score >= 80) return "A";
+    if (score >= 70) return "B";
+    if (score >= 60) return "C";
+    if (score >= 50) return "D";
+    return "F";
+}
+
+/* Remark */
+function remark(total) {
+    if (total >= 250) return "Excellent";
+    if (total >= 200) return "Very Good";
+    if (total >= 150) return "Good";
+    return "Needs Improvement";
+}
+
+/* Get position based on total score */
+function getPosition(total) {
+    const totals = students.map(s => s.results.reduce((a, b) => a + b.score, 0));
+    totals.sort((a, b) => b - a);
+    return totals.indexOf(total) + 1;
+}
+
+/* Top Student */
+function getTopStudent() {
+    let best = students[0];
+    let bestScore = 0;
+    students.forEach(s => {
+        let total = s.results.reduce((a, b) => a + b.score, 0);
+        if (total > bestScore) {
+            bestScore = total;
+            best = s;
+        }
+    });
+    return {best, bestScore};
+}
+
+/* Subject Ranking */
+function subjectRankings() {
+    let subjects = {};
+    students.forEach(s => {
+        s.results.forEach(r => {
+            if (!subjects[r.subject]) subjects[r.subject] = [];
+            subjects[r.subject].push(r.score);
+        });
+    });
+    for (let sub in subjects) {
+        subjects[sub].sort((a, b) => b - a);
+    }
+    return subjects;
+}
+
+let currentStudent = null;
+
+function login() {
+    let user = document.getElementById("username").value;
+    let pass = document.getElementById("password").value;
+
+    currentStudent = students.find(s => s.username === user && s.password === pass);
+
+    if (currentStudent) {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("teacherBox").style.display = "block";
+        document.getElementById("error").innerText = "";
+    } else {
+        document.getElementById("error").innerText = "Invalid username or password";
+    }
+}
+
+function approve() {
+    let pass = document.getElementById("teacherPassword").value;
+
+    if (pass === TEACHER_PASSWORD) {
+        document.getElementById("teacherBox").style.display = "none";
+        showResults();
+    } else {
+        document.getElementById("teacherError").innerText = "Invalid teacher password";
+    }
+}
+
+function showResults() {
+    document.getElementById("resultBox").style.display = "block";
+
+    document.getElementById("studentName").innerText = "Welcome, " + currentStudent.name;
+    document.getElementById("studentId").innerText = currentStudent.id;
+    document.getElementById("studentClass").innerText = currentStudent.class;
+    document.getElementById("term").innerText = currentStudent.term;
+    document.getElementById("year").innerText = currentStudent.year;
+
+    let table = document.getElementById("resultTable");
+    table.innerHTML = `
+        <tr>
+            <th>Subject</th>
+            <th>Score</th>
+            <th>Grade</th>
+            <th>Rank</th>
+        </tr>
+    `;
+
+    let total = 0;
+    let rankings = subjectRankings();
+
+    currentStudent.results.forEach(r => {
+        total += r.score;
+        let rank = rankings[r.subject].indexOf(r.score) + 1;
+        table.innerHTML += `
+            <tr>
+                <td>${r.subject}</td>
+                <td>${r.score}</td>
+                <td>${grade(r.score)}</td>
+                <td>${rank}</td>
+            </tr>
+        `;
+    });
+
+    let average = total / currentStudent.results.length;
+    let percentage = (total / (currentStudent.results.length * 100)) * 100;
+
+    document.getElementById("total").innerText = total;
+    document.getElementById("average").innerText = average.toFixed(2);
+    document.getElementById("percentage").innerText = percentage.toFixed(2);
+    document.getElementById("remark").innerText = remark(total);
+    document.getElementById("position").innerText = getPosition(total);
+
+    const top = getTopStudent();
+    document.getElementById("topStudent").innerHTML = `<strong>Top Student:</strong> ${top.best.name} (Total: ${top.bestScore})`;
+
+    // Teacher comment
+    if (percentage < 50) {
+        document.getElementById("comment").innerText = "See me (You need help)";
+    } else {
+        document.getElementById("comment").innerText = "Good job!";
+    }
+
+    // Bar chart
+    let subjects = currentStudent.results.map(r => r.subject);
+    let scores = currentStudent.results.map(r => r.score);
+
+    new Chart(document.getElementById("barChart"), {
+        type: 'bar',
+        data: {
+            labels: subjects,
+            datasets: [{
+                label: 'Scores',
+                data: scores,
+                backgroundColor: '#ffb6c1'
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true, max: 100 }
+            }
+        }
+    });
+}
+
+function logout() {
+    document.getElementById("loginBox").style.display = "block";
+    document.getElementById("teacherBox").style.display = "none";
+    document.getElementById("resultBox").style.display = "none";
+    document.getElementById("error").innerText = "";
+    document.getElementById("teacherError").innerText = "";
+    currentStudent = null;
+}
+</script>
+
+</body>
+</html>
